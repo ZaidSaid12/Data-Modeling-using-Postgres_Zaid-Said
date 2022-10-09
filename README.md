@@ -7,21 +7,17 @@
 
 ## Project Structure
 Data Modeling with Postgres
-|____data			# Dataset
-| |____log_data
-| | |____...
-| |____song_data
-| | |____...
-|
-|____notebook			# notebook for developing and testing ETL
-| |____etl.ipynb		    # developing ETL builder
-| |____test.ipynb		    # testing ETL builder
-| |____cheat-sheet.pdf
-|
-|____src			# source code
-| |____etl.py			    # ETL builder
-| |____sql_queries.py		    # ETL query helper functions
-| |____create_tables.py		    # database/table creation script
+- data
+    - log files
+        - ...
+    - Data files
+        - ...
+- create_tables.py
+- etl.ipynb
+- etl.py
+- README.md
+- sql_queries.py
+- test.ipynb
 
 ## How to run python scripts
 1. first we need to run create_tables.py, in order to create the database and the tables using `python create_tables.py`
