@@ -9,69 +9,211 @@ time_table_drop = "drop table if exists time"
 # CREATE TABLES
 
 songplay_table_create = ("""
-Create table songplays (songplay_id SERIAL primary key,start_time timestamp NOT NULL, user_id int NOT NULL, level text, song_id text, artist_id text, session_id int, location text, user_agent text)
+CREATE TABLE songplays
+  (
+     songplay_id SERIAL PRIMARY KEY,
+     start_time  TIMESTAMP NOT NULL,
+     user_id     INT NOT NULL,
+     level       TEXT,
+     song_id     TEXT,
+     artist_id   TEXT,
+     session_id  INT,
+     location    TEXT,
+     user_agent  TEXT
+  ) 
 """)
 
 user_table_create = ("""
-create table users (user_id int primary key, first_name text, last_name text, gender text, level text)
+CREATE TABLE users
+  (
+     user_id    INT PRIMARY KEY,
+     first_name TEXT,
+     last_name  TEXT,
+     gender     TEXT,
+     level      TEXT
+  ) 
 """)
 
 song_table_create = ("""
-create table songs (song_id text primary key, title text NOT NULL, artist_id text, year int, duration float NOT NULL)
+CREATE TABLE songs
+  (
+     song_id   TEXT PRIMARY KEY,
+     title     TEXT NOT NULL,
+     artist_id TEXT,
+     year      INT,
+     duration  FLOAT NOT NULL
+  ) 
 """)
 
 artist_table_create = ("""
-create table artists(artist_id text primary key, name text NOT NULL, location text, latitude float, longitude float)
+CREATE TABLE artists
+  (
+     artist_id TEXT PRIMARY KEY,
+     NAME      TEXT NOT NULL,
+     location  TEXT,
+     latitude  FLOAT,
+     longitude FLOAT
+  ) 
 """)
 
 time_table_create = ("""
-create table time (start_time TIMESTAMP PRIMARY KEY, 
-        hour INT, 
-        day INT, 
-        week INT, 
-        month INT, 
-        year INT, 
-        weekday VARCHAR)
+CREATE TABLE time
+  (
+     start_time TIMESTAMP PRIMARY KEY,
+     hour       INT,
+     day        INT,
+     week       INT,
+     month      INT,
+     year       INT,
+     weekday    VARCHAR
+  ) 
 """)
 
 # INSERT RECORDS
 
 songplay_table_insert = ("""
-insert into songplays( start_time, user_id, level, song_id, artist_id, session_id, location, user_agent)
-values( %s, %s, %s, %s, %s, %s, %s, %s) on conflict(songplay_id) do nothing
+INSERT INTO songplays
+            (
+                        start_time,
+                        user_id,
+                        level,
+                        song_id,
+                        artist_id,
+                        session_id,
+                        location,
+                        user_agent
+            )
+            VALUES
+            (
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s
+            )
+ON conflict
+            (
+                        songplay_id
+            )
+            do nothing
 """)
 
 user_table_insert = ("""
-INSERT INTO users (user_id, first_name, last_name, gender, level)
-    VALUES (%s, %s, %s, %s, %s)
-    ON CONFLICT (user_id) DO NOTHING
+INSERT INTO users
+            (
+                        user_id,
+                        first_name,
+                        last_name,
+                        gender,
+                        level
+            )
+            VALUES
+            (
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s
+            )
+ON conflict
+            (
+                        user_id
+            )
+            do UPDATE
+set    users.level = excluded.level
 """)
 
 song_table_insert = ("""
-INSERT INTO songs (song_id, title, artist_id, year, duration)
-    VALUES (%s, %s, %s, %s, %s)
-    ON CONFLICT (song_id) DO NOTHING
+INSERT INTO songs
+            (
+                        song_id,
+                        title,
+                        artist_id,
+                        year,
+                        duration
+            )
+            VALUES
+            (
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s
+            )
+ON conflict
+            (
+                        song_id
+            )
+            do nothing
 """)
 
 artist_table_insert = ("""
-INSERT INTO artists (artist_id, name, location, latitude, longitude)
-    VALUES (%s, %s, %s, %s, %s)
-    ON CONFLICT (artist_id) DO NOTHING
+INSERT INTO artists
+            (
+                        artist_id,
+                        NAME,
+                        location,
+                        latitude,
+                        longitude
+            )
+            VALUES
+            (
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s
+            )
+ON conflict
+            (
+                        artist_id
+            )
+            do nothing
 """)
 
 
 time_table_insert = ("""
-INSERT INTO time (start_time, hour, day, week, month, year, weekday)
-    VALUES (%s, %s, %s, %s, %s, %s, %s)
-    ON CONFLICT (start_time) DO NOTHING
+INSERT INTO time
+            (
+                        start_time,
+                        hour,
+                        day,
+                        week,
+                        month,
+                        year,
+                        weekday
+            )
+            VALUES
+            (
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s,
+                        %s
+            )
+ON conflict
+            (
+                        start_time
+            )
+            do nothing
 """)
 
 # FIND SONGS
 
 song_select = ("""
-SELECT s.song_id, a.artist_id 
-    FROM songs as s JOIN artists as a ON s.artist_id = a.artist_id
-    WHERE s.title=%s AND a.name=%s AND s.duration=%s
+SELECT s.song_id,
+       a.artist_id
+FROM   songs AS s
+       join artists AS a
+         ON s.artist_id = a.artist_id
+WHERE  s.title =% s
+       AND a.name =% s
+       AND s.duration =% s 
 """)
 
 # QUERY LISTS

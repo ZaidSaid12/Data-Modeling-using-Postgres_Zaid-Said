@@ -6,6 +6,17 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """
+    - Description:
+        - Takes path of the song files
+        - extract the related data to the dimensions {songs, artists}
+        - insert the data into the dimensions using the insert statements declared in the sql_queries file
+    - Paramteres:
+        - cur: cursor to execute queries on the database.
+        - filepath: path to the song files.
+    - Returns:
+        - None
+    """
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -19,6 +30,18 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """
+    - Description:
+        - Takes path to log files, read the data into a pandas dataframe
+        - filter the data and transform the timestamp(ts) column to datetime
+        - extract the data related to dimensions {users, time} and insert the data
+        - extract the data related to the fact table {songplays} and load it into the table
+    - Paramteres:
+        - cur: cursor to execute queries on the database.
+        - filepath: path to the log files.
+    - Returns:
+        - None
+    """
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -61,6 +84,17 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    - Description:
+        - uses the path of the directory {songs, logs} and according to the passed {func} execute the corresponding function
+    - Paramters:
+        - cur: cursors on the database
+        - conn: connection to the database
+        - filepath: path to the directory of {logs,songs} related to the passed {func}
+        - func: a passed function which denoted the name of the function to be used inside this function.
+    - Returns:
+        - None
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -80,6 +114,14 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """
+    - Description:
+        - main function, the starting point of the whole process
+    - Parameters:
+        - None
+    - Returns:
+        - None
+    """
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=student password=student")
     cur = conn.cursor()
 
